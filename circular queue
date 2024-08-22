@@ -1,0 +1,76 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct cqueue {
+    int size;
+    int r;
+    int f;
+    int *arr;
+    
+};
+
+
+int isfull(struct cqueue *c){
+    if((c->r+1)%c->size==c->f)
+        return 1;
+        
+    else
+        return 0;
+}
+int isempty(struct cqueue *c){
+    if(c->r==c->f){
+        return 1;
+        
+    }
+    else{
+      return 0;
+      
+    }
+}
+
+void enqueue(struct cqueue *c,int value){
+    if(isfull(c)){
+        printf("\nCircular queue overflow.");
+    }
+    else{
+        c->r=(c->r+1)%c->size;   //circular increment
+        c->arr[c->r]=value;
+        printf("\n%d is added to circular queue.",value);
+    }
+}
+
+int dequeue(struct cqueue *c){
+    int a=-1;
+    if(isempty(c)){
+        printf("Circular stack underflow.");
+        
+    }
+    else{
+        c->f=(c->f+1)%c->size;
+        a=c->arr[c->f];
+        
+    }
+    return a;
+    
+    
+}
+
+int main(){
+    struct cqueue c;
+    c.size=10;
+    c.f=0;
+    c.r=0;
+    c.arr = (int*)malloc(c.size * sizeof(int)); // dynamic memory allocation
+    enqueue(&c,10);
+    enqueue(&c,20);
+    enqueue(&c,30);
+    enqueue(&c,40);
+    printf("\n%d is dequeued.",dequeue(&c));
+    printf("\n%d is dequeued.",dequeue(&c));
+    printf("\n%d is dequeued.",dequeue(&c));
+    printf("\n%d is dequeued.",dequeue(&c));
+    printf("\n%d",isempty(&c));
+    printf("\n%d",isfull(&c));
+    
+    
+}
