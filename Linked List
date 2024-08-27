@@ -1,0 +1,141 @@
+#include <stdio.h>
+#include<stdlib.h>
+
+struct node{
+    int data;
+    struct node * next;
+}; 
+
+void traversal(struct node *ptr){
+    while(ptr!=NULL){
+        printf("\n %d ",ptr->data);
+        ptr=ptr->next;
+    }
+}
+
+struct node * insertatFirst(struct node *head ,int data){
+    struct node * ptr=(struct node *)malloc(sizeof(struct node));
+    ptr->next=head;
+    ptr->data=data;
+    return ptr;
+}
+
+struct node * insertatIndex(struct node *head ,int data,int index){
+    struct node * ptr=(struct node *)malloc(sizeof(struct node));
+    struct node * p=head;
+    
+    int i=0;
+    while(i!=index-1){
+        p=p->next;
+        i++;
+    }
+    ptr->next=p->next;
+    ptr->data=data;
+    p->next=ptr;
+    return head;
+}
+
+struct node * insertatEnd(struct node *head, int data){
+    struct node * ptr=(struct node *)malloc(sizeof(struct node));
+    struct node *p=head;
+    
+    while(p->next!=NULL){
+        p=p->next;
+    }
+    p->next=ptr;
+    ptr->next=NULL;
+    ptr->data=data;
+    return head;
+
+}
+
+struct node * insertafterNode(struct node *head ,struct node * prevnode,int data){
+    struct node * ptr=(struct node *)malloc(sizeof(struct node));
+    ptr->data=data;
+    ptr->next=prevnode->next;
+    prevnode->next=ptr;
+    return head;
+     
+
+}
+
+struct node *insertafterNum(struct node *head ,int num ,int data){
+        struct node * newnode=(struct node *)malloc(sizeof(struct node));
+
+        struct node *ptr=head;
+        //bring ptr to the prev node
+        while(ptr !=NULL && ptr->data!=num){
+            ptr=ptr->next;
+        }
+        
+        if(ptr!=NULL){
+            newnode->next=ptr->next;
+            newnode->data=data;
+            ptr->next=newnode;
+            
+        }
+        return head;
+        
+}
+
+
+
+
+
+int main(){
+    struct node *head;
+    struct node *second;
+    struct node *third;
+    struct node *fourth;
+    
+    //allocate memory for nodes in ll in heap
+    head=(struct node *) malloc(sizeof(struct node));
+    second=(struct node *) malloc(sizeof(struct node));
+    third=(struct node *) malloc(sizeof(struct node));
+    fourth=(struct node *) malloc(sizeof(struct node));
+    
+    //link first and second node
+    head->data=7;
+    head->next=second;
+    
+    //link second and third node
+    second->data=11;
+    second->next=third;
+    
+    //link third and fourth node
+    third->data=74;
+    third->next=fourth;
+    
+    //terminate at fourth node
+    fourth->data=66;
+    fourth->next=NULL;
+    
+    printf("\nFirst LL");
+    traversal(head);                //first transversal
+    
+    printf(" \nLL after inserting 28 at head.");
+    head=insertatFirst(head,28);   //head ptr updated
+    traversal(head);               //transversal after adding 26 at head
+    
+    
+    printf(" \nLL after inserting 45 btw 7 nd 11.");
+    head=insertatIndex(head,45,2);  //head ptr updated
+    traversal(head);                //transversal after adding 45 btw 7 and 11
+    
+    printf(" \nLL after inserting 57 at end.");
+    head=insertatEnd(head,57);      //head ptr updated
+    traversal(head);                //transversal after adding 57 at end
+    
+    printf(" \nLL after inserting 32 after a node.");
+    head=insertafterNode(head,second,32);      //head ptr updated
+    traversal(head);                           //transversal after adding 32 after 7
+    
+    printf(" \nLL after inserting 16 btw 74 and 66.");
+    head=insertafterNum(head,74,16);      //head ptr updated
+    traversal(head);
+    
+    
+    
+    
+}  
+
