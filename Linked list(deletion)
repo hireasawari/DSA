@@ -1,0 +1,122 @@
+#include <stdio.h>
+#include<stdlib.h>
+
+struct node{
+    int data;
+    struct node * next;
+}; 
+
+void traversal(struct node *ptr){
+    while(ptr!=NULL){
+        printf("\n %d ",ptr->data);
+        ptr=ptr->next;
+    }
+}
+
+struct node * deleteFirst(struct node *head){
+    struct node * ptr=head;
+    head=head->next;
+    free(ptr);
+    return head;
+}
+
+struct node *deleteLast(struct node *head){
+    struct node * p=head;
+    struct node * q=p->next;
+    
+    while(q->next!=NULL){
+        p=p->next;
+        q=q->next;
+    }
+    
+    p->next=NULL;
+    free(q);
+    return head;
+}
+
+struct node *deleteatIndex(struct node *head,int index){
+    struct node * p=head;
+    struct node * q=head->next;
+    
+    for(int i=0;i<index-1;i++){
+        p=p->next;
+        q=q->next;
+    }
+    p->next=q->next;
+    free(q);
+    return head;
+}
+
+struct node*deleteafterValue(struct node *head,int value){
+    struct node *p=head;
+    struct node *q=p->next;
+    
+    while(q->data!=value){
+        p=p->next;
+        q=q->next;
+        
+    }
+    p->next=q->next;
+    free(q);
+    return head;
+    
+}
+
+
+int main(){
+    struct node *head;
+    struct node *second;
+    struct node *third;
+    struct node *fourth;
+    struct node *fifth;
+    
+    //allocate memory for nodes in ll in heap
+    head=(struct node *) malloc(sizeof(struct node));
+    second=(struct node *) malloc(sizeof(struct node));
+    third=(struct node *) malloc(sizeof(struct node));
+    fourth=(struct node *) malloc(sizeof(struct node));
+    fifth=(struct node *) malloc(sizeof(struct node));
+    
+    //link first and second node
+    head->data=7;
+    head->next=second;
+    
+    //link second and third node
+    second->data=8;
+    second->next=third;
+    
+    //link third and fourth node
+    third->data=9;
+    third->next=fourth;
+    
+    //terminate at fourth node
+    fourth->data=10;
+    fourth->next=fifth;
+    
+    fifth->data=11;
+    fifth->next=NULL;
+    
+    printf("\nLL before deletion.");
+    traversal(head);                //first transversal
+    
+    //head=deleteFirst(head);
+    //
+    //printf("\nLL After head deletion .");
+    //traversal(head);  
+    printf("\nLL after deletion at index 2.");
+    head=deleteatIndex(head,2);
+    traversal(head);
+    
+    printf("\nLL after deletion of last element.");
+    head=deleteLast(head);
+    traversal(head);
+    
+    printf("\nLL after deletion after an element 8.");
+    head=deleteafterValue(head,8);
+    traversal(head);
+    
+   
+    
+    
+    
+}
