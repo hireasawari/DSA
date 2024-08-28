@@ -1,0 +1,162 @@
+#include <stdio.h>
+#include<stdlib.h>
+
+struct node{
+    int data;
+    struct node * next;
+}; 
+
+void traversal(struct node *head){
+    struct node *ptr=head;
+    printf("\n%d",ptr->data);
+    ptr=ptr->next;
+    while(ptr!=head){
+        printf("\n%d",ptr->data);
+        ptr=ptr->next;
+    }
+    
+}
+
+struct node * insertFirst(struct node *head,int data){
+    struct node * ptr=(struct node *)malloc(sizeof(struct node));
+    struct node * p=head;
+    ptr->data=data;
+    while(p->next!=head){
+        p=p->next;
+    }
+    
+    p->next=ptr;
+    ptr->next=head;
+    return ptr;
+    
+    
+}
+
+struct node * insertEnd(struct node *head,int data){
+    struct node * ptr=(struct node *)malloc(sizeof(struct node));
+    struct node * p=head;
+    ptr->data=data;
+    while(p->next!=head){
+        p=p->next;
+    }
+    
+    p->next=ptr;
+    ptr->next=head;
+    return head;
+}
+
+struct node * insertAfter(struct node *head,int value,int data){
+    struct node * q=(struct node *)malloc(sizeof(struct node));
+    q->data=data;
+    struct node *ptr=head;
+    while(ptr->data!=value){
+        ptr=ptr->next;
+        
+    } 
+    q->next=ptr->next;
+    ptr->next=q;
+   
+    //printf("\n%d",q->data);
+    return head;
+    
+}
+
+struct node *deleteHead(struct node *head){
+    struct node *q=head;
+    
+    while(q->next!=head){
+        q=q->next;
+    }
+    q->next=head->next;
+    struct node*ptr=head->next;
+    free(head);
+    return ptr;
+    
+    
+    
+}
+struct node *deleteEnd(struct node *head){
+    struct node *ptr=head;
+    struct node *q=ptr->next;
+    while(q->next!=head){
+        ptr=ptr->next;
+        q=q->next;
+    }
+    ptr->next=head;
+    free(q);
+    return head;
+
+}
+
+struct node *deleteNode(struct node *head,int data){
+    struct node *q=head;
+    
+    while(q->data!=data){
+        q=q->next;
+    }
+    struct node *ptr=q->next;
+    q->next=ptr->next;
+    free(ptr);
+    return head;
+    
+    
+}
+    
+
+
+int main(){
+    struct node *head;
+    struct node *second;
+    struct node *third;
+    struct node *fourth;
+    
+    //allocate memory for nodes in ll in heap
+    head=(struct node *) malloc(sizeof(struct node));
+    second=(struct node *) malloc(sizeof(struct node));
+    third=(struct node *) malloc(sizeof(struct node));
+    fourth=(struct node *) malloc(sizeof(struct node));
+    
+    //link first and second node
+    head->data=7;
+    head->next=second;
+    
+    //link second and third node
+    second->data=8;
+    second->next=third;
+    
+    //link third and fourth node
+    third->data=9;
+    third->next=fourth;
+    
+    //terminate at fourth node
+    fourth->data=10;
+    fourth->next=head;
+    
+    printf("\nFirst circular LL");
+    traversal(head); //first transversal
+    
+    printf("\nCLL after adding 11 to head. ");
+    head=insertFirst(head,11);
+    traversal(head);
+    
+    
+    printf("\nCLL ater adding 12 to end");
+    head=insertEnd(head,12);
+    traversal(head);
+    
+    printf("\nCLL ater adding 13 after 8");
+    head=insertAfter(head,8,13);
+    traversal(head);
+    
+    printf("\nCLL after deleting head 11");
+    head=deleteHead(head);
+    traversal(head);
+    
+    printf("\nCLL after deleting end 12");
+    head=deleteEnd(head);
+    traversal(head);
+    
+    printf("\nCLL after deleting 13 after 8");
+    head=deleteNode(head,8);
+    traversal(head);
+}  
