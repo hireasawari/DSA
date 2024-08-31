@@ -1,0 +1,88 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct queue {
+    int size;
+    int f;
+    int r;
+    int *arr;
+};
+
+int isFull(struct queue *cq){
+    if(((cq->r)+1)%cq->size==cq->f){
+        printf("\ncq full");
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+int isEmpty(struct queue *cq){
+    if(cq->f==cq->r){
+        printf("\ncq empty");
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+
+void enqueue(struct queue *cq,int value){
+    
+    if(isFull(cq)){
+        printf("\ncq full cannot enqueue");
+    }
+    else{
+        cq->r=((cq->r)+1)%cq->size;
+        cq->arr[cq->r]=value;
+        printf("\n%d enqueued",cq->arr[cq->r]);
+    }
+    
+    
+}
+
+int dequeue(struct queue *cq){
+    if(isEmpty(cq)){
+        printf("cq empty cannot dequeue.");
+        return -1;
+    }
+    else{
+        cq->f=((cq->f)+1)%cq->size;
+        int value=cq->arr[cq->f];
+        cq->arr[cq->f]=0;
+        return value;
+        
+    }
+}
+
+void display(struct queue *cq){
+    for(int i=0;i<cq->size;i++){
+        printf("\n Queue : %d",cq->arr[i]);
+    }
+}
+
+
+
+int main(){
+    struct queue *cq=(struct queue*)malloc(sizeof(struct queue ));
+    cq->f=0;
+    cq->r=0;
+    cq->size=5;
+    cq->arr=(int*)malloc(cq->size*sizeof(int));
+    
+    isEmpty(cq);
+    enqueue(cq,10);
+    enqueue(cq,20);
+    enqueue(cq,30);
+    enqueue(cq,40);
+    display(cq);
+    isFull(cq);
+    printf("\ndequeued%d\n",dequeue(cq));
+    printf("dequeued%d",dequeue(cq));
+    display(cq);
+    
+}
+
+
+
+
