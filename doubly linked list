@@ -1,0 +1,100 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node {
+    struct node*next;
+    struct node*prev;
+    int data;
+};
+
+void display(struct node*head){
+    struct node*p=head;
+    while(p!=NULL){
+        printf("\n%d",p->data);
+        p=p->next;
+    }
+}
+
+struct node* insert(struct node*head,int value){
+    struct node *newnode=(struct node *) malloc(sizeof(struct node));
+    struct node*p=head;
+    while(p->next!=NULL){
+        p=p->next;
+    }
+    p->next=newnode;
+    newnode->data=value;
+    newnode->next=NULL;
+    return head;
+}
+
+struct node *insertbefHead(struct node*head,int value){
+    struct node *newnode=(struct node *) malloc(sizeof(struct node));
+    newnode->prev=NULL;
+    newnode->data=value;
+    newnode->next=head;
+    return newnode;
+    
+}
+
+struct node * insertaftNode(struct node*head,int value,int value1){
+    struct node *newnode=(struct node *) malloc(sizeof(struct node));
+    struct node* ptr=head;
+    
+    while(ptr->data!=value1){
+        ptr=ptr->next;
+    }
+    newnode->data=value;
+    newnode->prev=ptr;
+    newnode->next=ptr->next;
+    ptr->next=newnode;
+    newnode->next->prev=newnode;
+    
+    return head;
+}
+
+struct node *delete(struct node *head,int value){
+    struct node* p=head;
+    
+    while(p->data!=value){
+        p=p->next;
+    }
+    
+    p->prev->next=p->next;
+    p->next->prev=p->prev;
+    return head;
+    
+}
+
+
+int main(){
+    struct node*head=(struct node *) malloc(sizeof(struct node));
+    struct node*next;
+    struct node*prev;
+    
+    head->prev=NULL;
+    head->data=10;
+    
+    printf("DLL:");
+    head=insert(head,20);
+    head=insert(head,30);
+    head=insert(head,40);
+    head=insert(head,50);
+    display(head);
+    printf("\n");
+    printf("\ninserting 60 to head");
+    head=insertbefHead(head,60);
+    display(head);
+    
+    printf("\n");
+    
+    printf("\ninserting 70 after 20");
+    head=insertaftNode(head,70,20);
+    display(head);
+    
+    printf("\ndeleting 70");
+    head=delete(head,70);
+    display(head);
+    
+    
+
+}
