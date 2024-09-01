@@ -1,0 +1,127 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node{
+    struct node *next;
+    int data;
+};
+
+void traversal(struct node *head){
+    struct node *p=head;
+    
+    while(p!=NULL){
+        printf("\nLL:%d",p->data);
+        p=p->next;
+        
+    }
+}
+
+struct node* insertFront(struct node*head,int value){
+    struct node*newnode;
+    newnode=(struct node *) malloc(sizeof(struct node));
+    
+    newnode->next=head;
+    newnode->data=value;
+    return newnode;
+    
+}
+
+struct node* insertEnd(struct node*head,int value){
+    struct node*newnode;
+    newnode=(struct node *) malloc(sizeof(struct node));
+    struct node*p=head;
+    
+    while(p->next!=NULL){
+        p=p->next;
+    }
+    p->next=newnode;
+    newnode->data=value;
+    newnode->next=NULL;
+    return head;
+}
+
+struct node* insertafterNode(struct node *head,int value,struct node* anode){
+    struct node*newnode;
+    newnode=(struct node *) malloc(sizeof(struct node));
+    struct node*p=head;
+    
+    while( p!=anode){
+        p=p->next;
+    }
+    newnode->next=p->next;
+    p->next=newnode;
+    newnode->data=value;
+    return head;
+    
+}
+struct node *deleteEnd(struct node*head){
+    struct node*p=head;
+    
+    while( p->next->next!=NULL){
+        p=p->next;
+    }
+    p->next=NULL;
+    
+
+    return head;
+    
+}
+
+struct node* deleteafterNode(struct node *head,struct node* anode){
+    
+    
+    anode->next=anode->next->next;
+    printf("\n%d"<anode->next->data);
+    return head;
+    
+}
+
+
+
+int main(){
+    struct node *head;
+    struct node *second;
+    struct node *third;
+    struct node *fourth;
+    
+    head=(struct node *) malloc(sizeof(struct node));
+    second=(struct node *) malloc(sizeof(struct node));
+    third=(struct node *) malloc(sizeof(struct node));
+    fourth=(struct node *) malloc(sizeof(struct node));
+    
+    head->data=10;
+    head->next=second;
+    
+    second->data=20;
+    second->next=third;
+    
+    third->data=30;
+    third->next=fourth;
+    
+    fourth->data=40;
+    fourth->next=NULL;
+    
+    traversal(head);
+    head=insertFront(head,50);
+    printf("\nAdding 50 to front");
+    traversal(head);
+    
+    head=insertEnd(head,60);
+    printf("\nAdding 60 to end");
+    traversal(head);
+    
+    head=insertafterNode(head,70,second);
+    printf("\nAdding 70 btw 20 and 30.");
+    traversal(head);
+    
+    head=deleteEnd(head);
+    printf("\nDeleting end");
+    traversal(head);
+
+    
+    head=deleteafterNode(head,second);
+    printf("\nDeleting 70 btw 20 and 30.");
+    traversal(head);
+    
+    
+}
