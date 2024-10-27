@@ -1,0 +1,106 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
+
+
+struct stack{
+    int top;
+    int size;
+    struct node *arr[100];
+};
+
+struct node{
+    char data;
+    struct node *left;
+    struct node *right;
+};
+
+
+
+void push(struct stack *s,struct node *node){                                            //push
+        s->arr[++s->top]=node;
+        printf("%c pushed.\n",node->data);
+    
+}
+
+struct node *pop(struct stack *s){                                                       //pop
+   
+        struct node *top=s->arr[s->top--];
+        printf("%c popped.\n",top->data);
+        return top;
+    
+    
+}
+
+int isOperator(char ch){                                                        //is operator
+    return (ch=='+'||ch=='-'||ch=='*'||ch=='/');
+}
+ 
+struct node *createNode(char data){                                             //create node
+    struct node *newNode=(struct node *)malloc(sizeof(struct node));
+    newNode->data=data;
+    newNode->right=NULL;
+    newNode->left=NULL;
+    return newNode;
+}
+
+void inorder(struct node *root){                             //inorder display of tree
+    if(root!=NULL){
+    inorder(root->left);
+    printf(" %c ",root->data);
+    inorder(root->right);
+    }
+}
+
+
+struct node *expTree(struct stack *s ,char *expr){
+    
+    for(int i=strlen(expr)-1;i>=0;i--){
+        if(!isOperator(expr[i])){
+            struct node *numNode=createNode(expr[i]);//not operator ->push
+           push(s,numNode);
+        }
+        else if(isOperator(expr[i])){                          //is operator ->pop 2              
+          struct node *leftNode=pop(s);
+          
+          struct node *rightNode=pop(s);
+          
+          
+          struct node *operatorNode=createNode(expr[i]);
+          operatorNode->left=leftNode;
+          operatorNode->right=rightNode;
+          
+          push(s,operatorNode);
+ 
+        }
+    }
+    return pop(s);
+    
+}
+
+
+
+
+int main(){
+    char expr[100];
+    
+    
+    struct stack *s=(struct stack *)malloc(sizeof(struct stack));               //stack initialization
+    s->top=-1;
+    s->size=100;
+    //s->arr=(struct node *)malloc(sizeof(struct node));
+    
+    
+    printf("Enter expression : ");                                              //input expression
+    scanf("%s",expr);
+    
+    struct node *root=expTree(s,expr);
+    inorder(root);
+                                                                                 //+*453
+   
+    
+   
+    
+    
+}
