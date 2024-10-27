@@ -1,0 +1,121 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node{
+    int data;
+    struct node *left;
+    struct node *right;
+};
+
+struct node *createNode(int data){
+    struct node *newNode=(struct node*)malloc(sizeof(struct node));
+    newNode->left=NULL;
+    newNode->right=NULL;
+    newNode->data=data;
+    return newNode;
+}
+
+struct node *insert( struct node * root,int data){
+    
+    
+    if(root==NULL){
+        return createNode(data);
+        
+    }
+    if(data<root->data){
+        root->left=insert(root->left,data);
+        return root;
+    }
+    else if(data>root->data) {
+        root->right=insert(root->right,data);
+        return root;
+    }
+    
+}
+
+void inorder(struct node * root){
+    if(root!=NULL){
+    inorder(root->left);
+    printf("%d ",root->data);
+    inorder(root->right);
+    }
+    
+}
+struct node *ipre(struct node *root){
+    struct node * temp=root->left;
+    while(temp!=NULL && temp->right!=NULL){
+        temp=temp->right;
+    }
+    return temp;
+}
+
+
+struct node *delete(struct node *root,int value){
+    //finding node
+    struct node *temp;
+    struct node *iop;
+    if(value<root->data){
+            root->left=delete(root->left,value);
+        }
+    else if (value>root->data){
+            root->right=delete(root->right,value);
+        }
+    else{
+        //leaf node
+        if(root->left==NULL &&root->right==NULL){
+            free(root);
+            return NULL;
+            }
+        
+        //1 child
+        else if(root->left==NULL){
+          temp =root->right;
+         free(root);
+         return  temp; 
+            
+        }
+        else if(root->right==NULL){
+         temp  =root->left;
+         free(root);
+         return  temp;
+        }
+        
+        //2 child
+        else{
+            iop=ipre(root);
+            root->data=iop->data;
+            root->left=delete(root->left,iop->data);
+        }
+        }
+    return root;
+}
+
+
+
+int main(){
+    struct node *root=createNode(7);
+   
+   
+    insert(root,6);
+    insert(root,9);
+    insert(root,3);
+    insert(root,8);
+    insert(root,11);
+    //inorder(root);
+    
+    
+   delete(root,3); //leaf node
+   delete(root,6); //1 child
+   delete(root,9);//2 child
+   
+   inorder(root);
+
+    
+    
+
+    
+    
+
+    
+
+}
