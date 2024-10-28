@@ -1,0 +1,116 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+int *hashtableLinear;
+
+
+void initializeTable(int hashTable[],int size){                                   //initialize 
+    for(int i=0;i<size;i++){
+        hashTable[i]=-1;
+    }
+}
+
+int hashFunction(int value,int size){
+    return value%size;
+}
+int primaryhashFunction (int value,int size){
+    
+    return (value%(size-1)+1);
+}
+
+
+
+void linearProbing(int value,int size){
+    printf("LINEAR PROBING");
+    int index,i=0;
+    index=hashFunction(value,size);
+    
+    if(hashtableLinear[(index+i)%size] !=-1){
+        
+        //collision occured
+        i++;
+        printf("Collision occured at %d.",value);
+        printf("Probe %d:\n",i);
+        hashtableLinear[(index+1)%size]=value;
+        printf("%d inserted at %d .\n",value,(index+1)%size);
+    }
+    else{
+    hashtableLinear[index]=value;
+    printf("%d inserted at %d .\n",value,index);
+    }
+}
+
+void quadraticProbing(int value,int size){
+   printf("QUADRATIC PROBING");
+    
+    int index,i=0;
+    index=hashFunction(value,size);
+    
+    if(hashtableLinear[(index+(i*i))%size] !=-1){
+        
+        //collision occured
+        i++;
+        printf("Collision occured at %d.\n",value);
+        printf("Probe %d:\n",i);
+        hashtableLinear[(index+(i*i))%size]=value;
+        printf("%d inserted at %d .\n",value,(index+1)%size);
+    }
+    else{
+    hashtableLinear[index]=value;
+    printf("%d inserted at %d .\n",value,index);
+    }
+}
+
+
+void doubleHashing(int value,int size){
+    
+    int index,i=0,index1;
+    index=hashFunction(value,size);
+    index1=primaryhashFunction(value,size);
+  
+    
+    while(hashtableLinear[(index+(i*index1))%size] !=-1){
+        
+        //collision occured
+        i++;
+        printf("Collision occured at %d.\n",value);
+        printf("Probe %d:\n",i);
+        printf("%d inserted at %d .\n",value,(index+(i*index1))%size);
+        if (i == size) {
+            printf("Hash table is full, cannot insert %d.\n", value);
+            return;
+        }
+    }
+    
+    hashtableLinear[(index+(i*index1))%size]=value;
+    printf("%d inserted at %d .\n",value,(index+(i*index1))%size);
+    
+}
+
+
+
+
+int main(){
+    
+    int size,noele; 
+    printf("Enter size of hash table :");
+    scanf("%d",&size);
+    
+    hashtableLinear =(int *)malloc(size *sizeof(int));
+    initializeTable(hashtableLinear,size);
+    
+    printf("Enter number of elements : ");
+    scanf("%d",&noele);
+    
+    int *keys=(int *)malloc(noele*sizeof(int*));
+    printf("Enter %d elements: ",noele);
+    for (int i=0;i<noele;i++){
+        scanf("%d",&keys[i]);
+    }
+    
+       printf("\mDOUBLE HASHING\n");
+
+    for (int i=0;i<noele;i++){
+        doubleHashing(keys[i],size);
+    }
+}
