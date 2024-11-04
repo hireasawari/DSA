@@ -1,0 +1,83 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node{
+    int data;
+    struct node * next;
+};
+
+struct node * createNode(int data){
+        struct node *n=(struct node *)malloc(sizeof(struct node));
+        n->data=data;
+        n->next=NULL;
+        printf("%d node created\n",data);
+        return n;
+}
+
+void insert(struct node **head,int value){
+    
+    struct node *newNode=createNode(value);
+    
+    if(*head==NULL){
+        *head=newNode;
+    }
+    else{
+        struct node *temp=*head;
+        while(temp->next!=NULL){
+            temp=temp->next;
+        }
+        temp->next=newNode;
+        
+    }
+}
+
+
+void delete(struct node *head,int value){
+    
+    struct node *temp=head;
+    struct node *prev;
+    if(temp!=NULL && temp->data==value){
+        printf(" \n%d found and deleted\n",temp->data);
+        free(temp);
+    }
+    while(temp->next!=NULL && temp->data!=value){
+        prev=temp;
+        temp=temp->next;
+    }
+    printf("\n%d found and deleted\n",temp->data);
+    prev->next=temp->next;
+    free(temp);
+    
+   
+    
+}
+
+void display(struct node *head){
+    printf("Display");
+    while(head!=NULL){
+        printf(" %d",head->data);
+        head=head->next;
+    }
+}
+
+int main(){
+    
+    struct node *head=NULL;
+    insert(&head,2);
+    insert(&head,3);
+    insert(&head,4);
+    insert(&head,5);
+    insert(&head,6);
+
+    display(head);
+    
+    delete(head,4);
+    display(head);
+    delete(head,5);
+    display(head);
+    
+    
+    
+    
+   
+}
