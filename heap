@@ -4,43 +4,97 @@
 struct maxHeap{
     int *arr;
     int size;
-    int total_size;
+    int maxsize;
 };
 
-void createmaxHeap(struct maxHeap* h,int value){
-    
-    if(h->size==h->total_size){
-        printf("Heap overflow");
-        exit(1);
+void swap(int *a,int *b){
+    int temp=*a;
+    *a=*b;
+    *b=temp;
+}
+
+void initialiseHeap(struct maxHeap* h,int n){
+    h->maxsize=n;
+    h->size=0;
+    h->arr=(int *)malloc(sizeof(int)*n);
+}
+
+void display(struct maxHeap *h){
+    printf("Display: ");
+    for(int i=0;i<h->size;i++){
+        printf(" %d ",h->arr[i]);
     }
+}
+
+void insert ( struct maxHeap *h,int value){
+    
+    if(h->size==h->maxsize){
+        printf("Heap overflow");
+        return;
+    }
+    
     h->arr[h->size]=value;
-    int index=h->size;
+    int i=h->size;
     h->size++;
     
-    if(h->arr[index]>)
+    while(i>0 && h->arr[(i-1)/2]<h->arr[i] ){                               //(i-1/2)->parent of i
+      swap(&h->arr[(i-1)/2],&h->arr[i]);
+      i=(i-1)/2;
+    }
+    
+    display(h);
+    printf("\n");
+}
+
+void heapify(struct maxHeap *h,int index){
+    int largest=index;
+    int left=2*index+1;
+    int right=2*index+2;
+    
+    if(h->size>left && h->arr[largest]<h->arr[left]){
+        largest=left;
+    }
+    if(h->size>right && h->arr[largest]<h->arr[right]){
+        largest=right;
+    }
+    
+    if(largest!=index){
+        swap(&h->arr[largest],&h->arr[index]);
+        heapify(h,largest);
+    }
+}
+
+
+void swapdelheap(struct maxHeap *h ){
+    int origsize=h->size;
+    
+    for(int i=h->size-1;i>0;i--){
+        swap(&h->arr[0],&h->arr[i]);
+        h->size--;
+        heapify(h,0);
+    }
+    h->size=origsize;
+    display(h);
     
 }
 
-void display(struct maxHeap *h,int size){
-    int n=size;
-    for(int i=0;i<n;i++){
-        printf("%d",h->arr[i]);
-    }
-}
+
 
 int main(){
-    int n;
-    printf("Enter size of array:");
-    scanf("%d",&n);
+    struct maxHeap *h = (struct maxHeap*)malloc(sizeof(struct maxHeap));
+    int n,data;
+    printf("Enter no.of elements : ");
+    scanf(" %d",&n);
+    initialiseHeap(h,n);
     
-    struct maxHeap *h=(struct maxHeap*)malloc(sizeof(struct maxHeap));
-    h->total_size=n;
-    h->size=0;
-    h->arr=(int *)malloc(n*sizeof(int));
-    
-    printf("Enter elements:");
+    printf("Enter elements : ");
     for(int i=0;i<n;i++){
-        scanf("%d",&h->arr[i]);
+        scanf("%d",&data);
+        insert(h,data);
     }
-    display(h,n);
+    
+    swapdelheap(h);
+    
+    
+    
 }
