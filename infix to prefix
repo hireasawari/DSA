@@ -1,0 +1,151 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<ctype.h>
+#include<string.h>
+
+struct stack{
+    char top;
+    int size;
+    char *arr;
+};
+
+int isEmpty(struct stack*s){
+    if(s->top==-1){
+        printf("stack empty");
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+int isFull(struct stack*s){
+    if(s->top==s->size-1){
+        printf("stack full");
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+
+void push(struct stack *s,char str){
+    if(isFull(s)){
+        printf("Stack full cannot push.");
+    }
+    else{
+        s->arr[++s->top]=str;
+        printf("\n%c pushed.",str);
+    }
+}
+
+void display(struct stack *s){
+    for(int i=0;i<=s->top;i++){
+        printf("\nStack:");
+        printf("%c",s->arr[i]);
+    }
+}
+
+char pop(struct stack *s){
+    if(isEmpty(s)){
+        printf("stack empty cannot pop.");
+        return '\0';
+    }
+    else{
+        return s->arr[s->top--];
+        
+    }
+}
+
+char peek(struct  stack *s){
+    int peek=s->arr[s->top];
+    return peek;
+}
+
+int isOperator(char ch){
+    return ch=='+'||ch=='-'||ch=='/'||ch=='*';
+    
+}
+
+int precedence(char ch){
+    
+    if(ch=='/' || ch=='*')
+    return 2;
+    
+    else if(ch=='+'||ch=='-')
+    return 1;
+    
+    else 
+    return -1;
+    
+}
+
+
+void infixtoprefix(struct stack *s,char *infix){
+    int len=strlen(infix);
+    char ans[s->size];
+    char ans1[s->size];
+
+    
+    
+    
+    for(int i=len - 1;i>=0;i--){
+        
+        if(infix[i]==')'){                          //  ) -> push
+            push(s,infix[i]);
+        }
+        
+        else if(infix[i]=='('){
+            
+            while(peek(s)!=')'){
+              ans[i]=pop(s);
+            }
+            ans1[i]=pop(s);
+        }
+        
+        
+        else if(isOperator(infix[i])){                        //operator ->push
+            if(precedence(infix[i])>precedence(peek(s)) ||  precedence(infix[i])==precedence(peek(s))  )
+            push(s,infix[i]);
+            
+            else if(precedence(infix[i])<precedence(peek(s)) ){
+                ans[i]=pop(s);
+            }
+        }
+        else if(!isOperator(infix[i])){                  //operand ->write in ans
+            ans[i]=infix[i];
+        }
+        
+    }
+    
+    // int lenans=strlen(ans);
+    
+    while(!isEmpty(s)){
+        ans[s->size-lenans]=pop(s);
+    }
+    printf("Prefix : ");
+     for(int i=len - 1;i>=0;i--){
+        printf("%c",infix[i]);    
+       }
+    
+    
+}
+
+
+
+
+int main(){
+    struct stack *s=(struct stack* )malloc(sizeof(struct stack));
+    s->top=-1;
+    s->size=10;
+    s->arr=(char*)malloc(s->size* sizeof(char));
+    char infix[s->size];
+    
+    printf("Enter infix expression : ");
+    scanf("%s",infix);
+    
+    infixtoprefix(s,infix);
+    
+
+    
+    
+}
