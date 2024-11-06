@@ -4,14 +4,14 @@
 #include<string.h>
 
 struct stack{
-    char top;
+    int top;
     int size;
     char *arr;
 };
 
 int isEmpty(struct stack*s){
     if(s->top==-1){
-        printf("stack empty");
+        printf("\nstack empty");
         return 1;
     }
     else{
@@ -34,7 +34,7 @@ void push(struct stack *s,char str){
     }
     else{
         s->arr[++s->top]=str;
-        printf("\n%c pushed.",str);
+        printf("\n%c pushed.\n",str);
     }
 }
 
@@ -83,7 +83,7 @@ int precedence(char ch){
 void infixtoprefix(struct stack *s,char *infix){
     int len=strlen(infix);
     char ans[s->size];
-    char ans1[s->size];
+    int j=0;
 
     
     
@@ -96,35 +96,35 @@ void infixtoprefix(struct stack *s,char *infix){
         
         else if(infix[i]=='('){
             
-            while(peek(s)!=')'){
-              ans[i]=pop(s);
+            while(peek(s)!=')' && !isEmpty(s)){
+              ans[j++]=pop(s);
             }
-            ans1[i]=pop(s);
+            pop(s);
         }
         
         
         else if(isOperator(infix[i])){                        //operator ->push
-            if(precedence(infix[i])>precedence(peek(s)) ||  precedence(infix[i])==precedence(peek(s))  )
+            
+            while(!isEmpty(s) && precedence(infix[i])<precedence(peek(s)) ){
+            ans[j++]=pop(s);
+            }
+
             push(s,infix[i]);
             
-            else if(precedence(infix[i])<precedence(peek(s)) ){
-                ans[i]=pop(s);
             }
-        }
+        
         else if(!isOperator(infix[i])){                  //operand ->write in ans
-            ans[i]=infix[i];
+            ans[j++]=infix[i];
         }
         
     }
     
-    // int lenans=strlen(ans);
-    
     while(!isEmpty(s)){
-        ans[s->size-lenans]=pop(s);
+        ans[j++]=pop(s);
     }
-    printf("Prefix : ");
-     for(int i=len - 1;i>=0;i--){
-        printf("%c",infix[i]);    
+    printf("\nPrefix : ");
+     for(int i=j - 1;i>=0;i--){
+        printf("%c",ans[i]);    
        }
     
     
